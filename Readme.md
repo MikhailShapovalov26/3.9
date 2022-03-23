@@ -45,6 +45,34 @@ cat /etc/apache2/sites-available/testhome.conf
 
 
 Во вложение рис 1 будет, там скрин с браузера
+
+# Доработка
+ Листинг нименования сертификатов
+                root@testhome:~# ls /etc/ssl
+                certs  openssl.cnf  private  testhome.crt  testhome.key
+Сертификаты я подготовитл для nginx их  и оставил.
+конфиг файл апача новый
+
+                <VirtualHost testhome:80>
+
+                ServerName testhome
+                ServerAlias www.testhome
+                DocumentRoot /var/www/testhome/html
+                </VirtualHost>
+
+                <VirtualHost testhome:443>
+
+                ServerName testhome
+                ServerAlias www.testhome
+                DocumentRoot /var/www/testhome/html
+                SSLEngine on
+                SSLCertificateFile /etc/ssl/testhome.crt
+                SSLCertificateKeyFile /etc/ssl/testhome.key
+
+
+                </VirtualHost>
+так же переименовал hostname и прописал в hosts на локальном компьютере, и всё пошло
+скрин во вложении. Ris-dorabotka.png
 ## 4.
         ./testssl.sh -U --sneaky https://www.platon.ru/
 
@@ -201,6 +229,27 @@ cat /etc/apache2/sites-available/testhome.conf
         permitted by applicable law.
         Last login: Tue Mar  8 08:20:09 2022 from 192.168.88.238
 Конект произошёл. 
+
+                :~/.ssh$ ll
+                итого 28
+                drwx------  2 mikhail mikhail 4096 мар 23 22:03 ./
+                drwxr-xr-x 27 mikhail mikhail 4096 мар 23 20:59 ../
+                -rw-rw-r--  1 mikhail mikhail   46 мар  8 11:19 config
+                -rw-r--r--  1 mikhail mikhail  564 мар 19 16:25 id_rsa.pub
+                -rw-------  1 mikhail mikhail  222 мар 19 16:25 known_hosts
+                -rw-r--r--  1 mikhail mikhail  222 мар 12 12:33 known_hosts.old
+                -rw-------  1 mikhail mikhail 2590 мар 23 22:02 newid_rsa
+                ssh root@192.168.88.239
+                Linux testhome 5.3.5+ #1 SMP Tue Nov 5 16:13:51 CST 2019 armv7l
+
+                The programs included with the Debian GNU/Linux system are free software;
+                the exact distribution terms for each program are described in the
+                individual files in /usr/share/doc/*/copyright.
+
+                Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+                permitted by applicable law.
+                Last login: Wed Mar 23 19:18:31 2022 from 192.168.88.238
+Проблем с подключением не возникло. 
 P.S. очень интересное задание. 
 ## 7.
         sudo tcpdump -i wlx7898e8c1c8b3 -c 100 -w icmp.pcap
